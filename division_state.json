@@ -1,0 +1,27 @@
+{
+  clients: [
+    {
+      CPU: {clock: 960, cores: 2, used: 16.4},
+      MAC: "B827EB484874",
+      RAM: {total: 0.9017105103, used: 0.1423149109, available: 0.7593955994},
+      name: "openwrt-router",
+      os: "Linux",
+      project: "",
+      tag: ["gateway", "router"],
+      violations: {down: false, up: false, cpu: false}
+    },
+    {
+      CPU: {clock: 960, cores: 2, used: 16.4},
+      MAC: "B827EB484874",
+      RAM: {total: 0.9017105103, used: 0.1423149109, available: 0.7593955994},
+      name: "openwrt-router",
+      os: "Linux",
+      project: "",
+      tag: ["gateway", "router"],
+      violations: {down: false, up: false, cpu: false}
+    }
+  ],
+  cpu_limit : 19,
+  down_limit : 28,
+  up_limit : 34
+}
