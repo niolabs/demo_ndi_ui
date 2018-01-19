@@ -32,7 +32,6 @@ module.exports = {
     new UglifyJSPlugin({ parallel: true, sourceMap: false, cache: true, uglifyOptions: { compress: true } }),
     new webpack.HashedModuleIdsPlugin({ hashFunction: 'sha256', hashDigest: 'hex', hashDigestLength: 20 }),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new CopyWebpackPlugin([{from: 'assets/install', to:'install' }]),
   ],
 
   module: {
