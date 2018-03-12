@@ -1,11 +1,13 @@
 import React from 'react';
-import { Col, Row, Card, CardBody } from '@nio/ui-kit';
+import { Button, Col, Row, Card, CardBody } from '@nio/ui-kit';
 
 import pubkeeper_client from '../util/pubkeeper_client';
 import AdminHeader from '../components/admin_header';
 import ClientCard from '../components/client_card';
 import SelectedClientCard from '../components/selected_client_card';
 import SelectedRouterCard from '../components/selected_router_card';
+import TrainingPrompt from '../components/training_prompt';
+import TrainingCard from '../components/training_card'
 
 export default class DocsPage extends React.Component {
   constructor() {
@@ -15,12 +17,13 @@ export default class DocsPage extends React.Component {
       clients: [],
       routerClients: [],
       selectedClient: false,
+      isTraining: false,
     };
 
     const fns = ['selectClient', 'handleClientStateData', 'updateClientResponseState', 'handleRouterStateData', 'forceClientUpdate'];
     fns.forEach((fn) => { this[fn] = this[fn].bind(this); });
   }
-  
+
   componentDidMount() {
     const app = this;
     pubkeeper_client.connect().then((client) => {
@@ -30,15 +33,15 @@ export default class DocsPage extends React.Component {
       client.addBrewer('dni.newui', brewer => { app.brewer = brewer; setTimeout(() => { app.forceClientUpdate(); }, 1000); });
     }).catch(e => console.error(e)); // eslint-disable-line no-console
   }
-  
+
   componentWillUnmount() {
     pubkeeper_client.disconnect();
   }
-  
+
   forceClientUpdate() {
     this.brewer.brewJSON([{ go: true }]);
   }
-  
+
   handleClientStateData(data) {
     const { clients } = this.state;
     const json = new TextDecoder().decode(data);
@@ -51,7 +54,7 @@ export default class DocsPage extends React.Component {
     }
     this.setState({ clients });
   }
-  
+
   handleRouterStateData(data) {
     const json = new TextDecoder().decode(data);
     const newVars = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
@@ -75,7 +78,7 @@ export default class DocsPage extends React.Component {
   selectClient(MAC = false) {
     this.setState({ selectedClient: MAC === this.state.selectedClient ? false : MAC });
   }
-  
+
   updateClientResponseState(state, selectedClient) {
     const { clients } = this.state;
     clients[clients.findIndex(c => c.MAC === selectedClient )].nonResponsive = state;
@@ -83,16 +86,22 @@ export default class DocsPage extends React.Component {
     if (selectedClient === this.state.selectedClient && state) this.selectClient();
   }
 
+
   render() {
-    const { clients, routerClients, selectedClient } = this.state;
+    const { clients, routerClients, selectedClient, isTraining } = this.state;
 
     const allClients = clients.concat(routerClients);
-    
+
     return (
       <div>
         <Card id="adminHeader">
           <CardBody className="p-3">
             {this.client && <AdminHeader forceClientUpdate={this.forceClientUpdate} />}
+          </CardBody>
+        </Card>
+        <Card id="trainingPrompt">
+          <CardBody className="p-2">
+            <TrainingPrompt />
           </CardBody>
         </Card>
         <Row>
@@ -140,7 +149,12 @@ export default class DocsPage extends React.Component {
               )}
             </Col>
           )}
-          
+        </Row>
+        <Row>
+          <Col id="selectedCardHolder" xs="12" md="4" className="mt-3" onClick={() => this.selectClient()}>
+              <h6 className="text-right">Report</h6>
+              <TrainingCard />
+          </Col>
         </Row>
       </div>
     );
