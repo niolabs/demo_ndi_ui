@@ -7,7 +7,6 @@ import ClientCard from '../components/client_card';
 import SelectedClientCard from '../components/selected_client_card';
 import SelectedRouterCard from '../components/selected_router_card';
 import TrainingPrompt from '../components/training_prompt';
-import TrainingCard from '../components/training_card'
 
 export default class DocsPage extends React.Component {
   constructor() {
@@ -149,12 +148,6 @@ export default class DocsPage extends React.Component {
               )}
             </Col>
           )}
-        </Row>
-        <Row>
-          <Col id="selectedCardHolder" xs="12" md="4" className="mt-3" onClick={() => this.selectClient()}>
-              <h6 className="text-right">Report</h6>
-              <TrainingCard />
-          </Col>
         </Row>
       </div>
     );
