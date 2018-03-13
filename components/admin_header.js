@@ -29,7 +29,7 @@ export default class AdminHeader extends React.Component {
       total_disk: 0,
       available_disk: 0,
     };
-    
+
     const fns = ['sendBrew', 'handleSystemStatsData'];
     fns.forEach((fn) => { this[fn] = this[fn].bind(this); });
   }
@@ -39,14 +39,14 @@ export default class AdminHeader extends React.Component {
     pubkeeper_client.addBrewer('dni.admin_limits', brewer => { app.brewer = brewer ;});
     pubkeeper_client.addPatron('dni.system_stats', { autoRemoveListeners: true }, patron => patron.on('message', app.handleSystemStatsData));
   }
-  
+
   handleSystemStatsData(data) {
     const json = new TextDecoder().decode(data);
     const system = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
-    
+
     const { cpu_limit, up_limit, down_limit, ram_limit, total_cpu, available_cpu, total_ram, available_ram, total_disk, available_disk, total_clients, stressed_clients } = system;
     this.setState({ total_cpu, available_cpu, total_ram, available_ram, total_clients, stressed_clients, total_disk, available_disk });
-    
+
     if (cpu_limit !== undefined && !this.state.cpu_changing) {
       this.setState({ cpu_limit });
     }
@@ -60,7 +60,7 @@ export default class AdminHeader extends React.Component {
       this.setState({ ram_limit });
     }
   }
-  
+
   sendBrew(data) {
     this.brewer.brewJSON([data]);
     setTimeout(() => { this.props.forceClientUpdate(); this.setState({ cpu_changing: false, up_changing: false, down_changing: false, ram_changing: false }); }, 1500);
@@ -68,7 +68,7 @@ export default class AdminHeader extends React.Component {
 
   render() {
     const { cpu_limit, cpu_max, ram_limit, ram_max, down_limit, down_max, up_limit, up_max, total_clients, stressed_clients, total_cpu, available_cpu, total_ram, available_ram, total_disk, available_disk } = this.state;
-    
+
     return (
       <Row>
         <Col xs="12" lg="8" className="summary">

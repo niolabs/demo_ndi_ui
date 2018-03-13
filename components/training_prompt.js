@@ -23,42 +23,43 @@ export default class TrainingPrompt extends React.Component {
   componentDidMount() {
     const app = this;
     pubkeeper_client.addBrewer('dni.primes.start', brewer => { app.brewer = brewer ;});
-    this.patron = pubkeeper_client.addPatron(`dni.primes.complete`, { autoRemoveListeners: true }, (patron) => {
+    pubkeeper_client.addPatron('dni.complete', (patron) => {
       patron.on('message', this.handleTrainingData);
     });
   }
 
   componentWillUnmount() {
-    pubkeeper_client.removePatron(this.patron);
+    pubkeeper_client.disconnect();
   }
 
   handleTrainingData(data) {
-    const clients = this.state.clients
+
+    const { clients, isTraining } = this.state;
     const json = new TextDecoder().decode(data);
-    const train = this.state.isTraining;
     const client = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
 
-    train && clients.push({ 'client': client.client, 'delta': client.delta});
-    this.setState({clients});
+    if (isTraining) {
+      const newClients = clients;
+      newClients.push(client);
+      this.setState({ clients: newClients });
+    }
   }
 
   handleClick(e) {
     const value = Number(document.getElementById('primeNumberCount').value);
     const curr = new  Date().toISOString();
     const clients = [];
-    this.setState({ primes: value, startTime: curr, clients: clients, isTraining: true });
+    this.setState({ primes: value, startTime: curr, clients: [], isTraining: true });
     this.brewer.brewJSON([{state: true, length: value, number: this.state.number, time: curr}])
   }
 
   render() {
     const { primes, clients, isTraining } = this.state;
-    const clientList = clients.map((d, i) => <td key={i}>{d.client}</td>);
-    const deltaList = clients.map((d, i) => <td key={i}>{d.delta}</td>);
 
     return (
       <Row>
         <Col xs="12" sm="3" className="summary-label border-right">
-          <Button color="primary" onClick={ this.handleClick }>Prime Training</Button>
+          <Button color="primary" onClick={() => this.handleClick()}>Prime Training</Button>
         </Col>
         <Col xs="12" sm="3" className="summary-label border-right">
           <Form>
@@ -82,10 +83,7 @@ export default class TrainingPrompt extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    {clientList}
-                    {deltaList}
-                  </tr>
+                    {clients.map((d, i) => <tr key={i}><td>{d.client}</td><td>{d.delta}</td></tr>)}
                 </tbody>
               </Table>
               <hr />
