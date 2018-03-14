@@ -29,8 +29,8 @@ export default class AdminHeader extends React.Component {
     };
     this.loadTestOptions = [
       { label: 'Calculate 10,000 Primes', value: 10000 },
-      { label: 'Calculate 50,000 Primes', value: 50000 },
       { label: 'Calculate 100,000 Primes', value: 100000 },
+      { label: 'Calculate 500,000 Primes', value: 500000 },
     ];
 
     const fns = ['sendBrew', 'handleSystemStatsData'];
