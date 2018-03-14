@@ -19,16 +19,20 @@ const ClientCard = ({ client, selectClient }) => (
         </div>
         <div className="content-pane">
           <div className="client-name">
-            <h6>{client.tag[1].toLowerCase()} / {client.os.toLowerCase() === 'darwin' ? 'macos' : client.os.toLowerCase()}</h6>
-            {client.name}<br />
+            <h6 className="mt-0 mb-1">{client.name}</h6>
+            {client.tag[1].toLowerCase()} / {client.os.toLowerCase() === 'darwin' ? 'macos' : client.os.toLowerCase()}<br />
             {client.project && (<a href={`http://${client.project}`} target="_blank">{client.project}</a>)}
           </div>
         </div>
         <div className="icon-pane text-muted">
-          <i className={`fa fa-dashboard ${client.violations.cpu && 'text-danger'}`} />
-          <i className={`fa fa-microchip ${client.violations.ram && 'text-danger'}`} />
-          <i className={`fa fa-cloud-download ${client.violations.down && 'text-danger'}`} />
-          <i className={`fa fa-cloud-upload ${client.violations.up && 'text-danger'}`} />
+          <i className={`fa fa-lg fa-dashboard ${client.violations.cpu && 'text-danger'}`} />
+          <div className="divider" />
+          <i className={`fa fa-lg fa-cloud-download ${client.violations.down && 'text-danger'}`} />
+        </div>
+        <div className="icon-pane text-muted">
+          <i className={`fa fa-lg fa-microchip ${client.violations.ram && 'text-danger'}`} />
+          <div className="divider" />
+          <i className={`fa fa-lg fa-cloud-upload ${client.violations.up && 'text-danger'}`} />
         </div>
       </CardBody>
     </Card>

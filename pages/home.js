@@ -117,12 +117,12 @@ export default class DocsPage extends React.Component {
           {this.groupTags.map((gt) => {
             const tagClients = allClients && allClients.filter(c => c.tag[0] === gt);
             return (
-              <Row className="mt-3" key={gt}>
+              <Row className="mt-4" key={gt}>
                 <Col xs="6">
-                  <h6>{gt}</h6>
+                  <h5>{gt}</h5>
                 </Col>
                 <Col xs="6" className="text-muted text-right">
-                  <h6>{tagClients.length} client{tagClients.length !== 1 && 's'}</h6>
+                  <h5>{tagClients.length} client{tagClients.length !== 1 && 's'}</h5>
                 </Col>
                 <Col xs="12">
                   <hr className="mt-0 mb-2" />
