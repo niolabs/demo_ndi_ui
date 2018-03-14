@@ -1,27 +1,36 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
 
 module.exports = {
   entry: path.join(__dirname, 'assets/index.js'),
 
+  output: {
+    path: path.join(__dirname, 'public'),
+    filename: '[chunkhash].min.js',
+    publicPath: '/',
+  },
+
   devServer: {
     host: '0.0.0.0',
     contentBase: path.join(__dirname, 'public'),
     compress: false,
-    port: 3002,
+    port: 3000,
     historyApiFallback: true,
     filename: '[chunkhash].min.js',
     https: true,
+    disableHostCheck: true,
+    inline: false,
   },
 
   plugins: [
-    new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('development') }),
-    new HtmlWebpackPlugin({ template: path.join(__dirname, 'assets/index.html'), favicon: path.join(__dirname, 'assets/favicon.ico'), inject: 'body', minify: { collapseWhitespace: true, collapseInlineTagWhitespace: true, removeComments: true, removeRedundantAttributes: true } }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'assets/index.html'),
+      favicon: path.join(__dirname, 'assets/favicon.ico'),
+      inject: 'body',
+    }),
     new ExtractTextPlugin('[contenthash].min.css'),
   ],
 
@@ -31,6 +40,15 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: { minimize: true },
+          },
+        ],
       },
       {
         include: [/\.(ttf|woff|woff2|eot|svg)$/],

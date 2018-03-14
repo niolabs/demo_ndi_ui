@@ -1,26 +1,38 @@
 import React from 'react';
-import { Card, CardBody } from '@nio/ui-kit';
+import { Col, Card, CardBody } from '@nio/ui-kit';
 
-const ClientCard = ({ client }) => (
-  <Card>
-    <CardBody className="content-holder">
-      <div className="os-pane">
-        <div className="os-icon" />
-      </div>
-      <div className="content-pane">
-        <div className="client-name">
-          <h6 className="mb-1">{client.tag && client.tag[0] === 'cloud' && `${client.tag[1]} - `} {client.name}</h6>
-          {client.project && (<a href={`http://${client.project}`} target="_blank">{client.project}</a>)}
+const ClientCard = ({ client, selectClient, isSelected }) => (
+  <Col
+    onClick={() => selectClient(client.MAC)}
+    xs="12"
+    sm="6"
+    md="4"
+    lg="3"
+    xl="2"
+    className={`mb-3 client-card ${client.tag[1].toLowerCase()} ${client.os.toLowerCase()} ${client.nonResponsive && 'non-responsive'} ${(client.violations.cpu || client.violations.up || client.violations.ram || client.violations.down) && 'stressed'}`}
+  >
+    <Card>
+      <CardBody className="content-holder">
+        <div className="left-pane">
+          <div className="brand-icon" />
+          <div className="divider" />
+          <div className="os-icon" />
         </div>
-      </div>
-      <div className="icon-pane text-muted">
-        <i className={`fa fa-dashboard ${client.violations.cpu && 'text-danger'}`} />
-        <i className={`fa fa-microchip ${client.violations.ram && 'text-danger'}`} />
-        <i className={`fa fa-cloud-download ${client.violations.down && 'text-danger'}`} />
-        <i className={`fa fa-cloud-upload ${client.violations.up && 'text-danger'}`} />
-      </div>
-    </CardBody>
-  </Card>
+        <div className="content-pane">
+          <div className="client-name">
+            {client.name}<br />
+            {client.project && (<a href={`http://${client.project}`} target="_blank">{client.project}</a>)}
+          </div>
+        </div>
+        <div className="icon-pane text-muted">
+          <i className={`fa fa-dashboard ${client.violations.cpu && 'text-danger'}`} />
+          <i className={`fa fa-microchip ${client.violations.ram && 'text-danger'}`} />
+          <i className={`fa fa-cloud-download ${client.violations.down && 'text-danger'}`} />
+          <i className={`fa fa-cloud-upload ${client.violations.up && 'text-danger'}`} />
+        </div>
+      </CardBody>
+    </Card>
+  </Col>
 );
 
 export default ClientCard;

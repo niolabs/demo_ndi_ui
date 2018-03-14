@@ -1,7 +1,5 @@
 import React from 'react';
-import { Col, Row, Card, CardBody, RangeSlider } from '@nio/ui-kit';
-
-import pubkeeper_client from '../util/pubkeeper_client';
+import { Col, Row, RangeSlider, SelectDropdown } from '@nio/ui-kit';
 
 export default class AdminHeader extends React.Component {
   constructor() {
@@ -29,15 +27,21 @@ export default class AdminHeader extends React.Component {
       total_disk: 0,
       available_disk: 0,
     };
+    this.loadTestOptions = [
+      { label: 'Calculate 10,000 Primes', value: 10000 },
+      { label: 'Calculate 50,000 Primes', value: 50000 },
+      { label: 'Calculate 100,000 Primes', value: 100000 },
+    ];
 
     const fns = ['sendBrew', 'handleSystemStatsData'];
     fns.forEach((fn) => { this[fn] = this[fn].bind(this); });
   }
 
   componentDidMount() {
-    const app = this;
-    pubkeeper_client.addBrewer('dni.admin_limits', brewer => { app.brewer = brewer ;});
-    pubkeeper_client.addPatron('dni.system_stats', { autoRemoveListeners: true }, patron => patron.on('message', app.handleSystemStatsData));
+    const { pkClient } = this.props;
+
+    pkClient.addBrewer('dni.admin_limits', (brewer) => { this.brewer = brewer; });
+    pkClient.addPatron('dni.system_stats', patron => patron.on('message', this.handleSystemStatsData));
   }
 
   handleSystemStatsData(data) {
@@ -63,16 +67,38 @@ export default class AdminHeader extends React.Component {
 
   sendBrew(data) {
     this.brewer.brewJSON([data]);
-    setTimeout(() => { this.props.forceClientUpdate(); this.setState({ cpu_changing: false, up_changing: false, down_changing: false, ram_changing: false }); }, 1500);
+    setTimeout(() => {
+      this.props.forceClientUpdate();
+      this.setState({ cpu_changing: false, up_changing: false, down_changing: false, ram_changing: false });
+    }, 1500);
   }
 
   render() {
     const { cpu_limit, cpu_max, ram_limit, ram_max, down_limit, down_max, up_limit, up_max, total_clients, stressed_clients, total_cpu, available_cpu, total_ram, available_ram, total_disk, available_disk } = this.state;
+    const { isTraining, startPrimesTest } = this.props;
 
     return (
       <Row>
         <Col xs="12" lg="8" className="summary">
-          <h2 className="page-title">nio distributed <br />system intelligence</h2>
+          <Row>
+            <Col xs="12" sm="9">
+              <h2 className="page-title">nio distributed intelligence</h2>
+              <hr className="top-divider" />
+            </Col>
+            <Col xs="12" sm="3">
+              {isTraining ? (
+                <div className="pt-2">
+                  <i className="text-primary fa fa-spinner fa-spin fa-fw fa-2x pull-right" />
+                </div>
+              ) : (
+                <SelectDropdown
+                  onChange={qty => qty && startPrimesTest(qty)}
+                  options={this.loadTestOptions}
+                  placeholder="distribute load test"
+                />
+              )}
+            </Col>
+          </Row>
           <hr />
           <Row>
             <Col xs="6" sm="3" className="summary-label border-right">
