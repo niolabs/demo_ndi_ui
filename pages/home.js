@@ -12,7 +12,7 @@ import SelectedPrimesTestCard from '../components/selected_primestest_card';
 export default class DocsPage extends React.Component {
   constructor() {
     super();
-    this.groupTags = ['cloud', 'office', 'gateway', 'laptop', 'edge'];
+    this.groupTags = ['cloud', 'office', 'network', 'laptop', 'edge'];
     this.state = {
       clients: [],
       routerClients: [],
@@ -70,7 +70,7 @@ export default class DocsPage extends React.Component {
       thisClient.MAC = thisClient.name;
       thisClient.violations = { cpu: false, down: false, up: false };
       thisClient.os = 'meraki';
-      thisClient.tag = ['gateway', 'meraki'];
+      thisClient.tag = ['network', 'meraki'];
       thisClient.visibleRouterClientList = thisClient.router_info
         .filter(c => c.name && (c.network_up / 1024 / 1024).toFixed(1) > 0 && (c.network_down / 1024 / 1024).toFixed(1) > 0)
         .sort((a, b) => a.name.localeCompare(b.name));

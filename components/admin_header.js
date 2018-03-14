@@ -81,11 +81,11 @@ export default class AdminHeader extends React.Component {
       <Row>
         <Col xs="12" lg="8" className="summary">
           <Row>
-            <Col xs="12" sm="9">
+            <Col xs="12" md="9">
               <h2 className="page-title">nio distributed intelligence</h2>
               <hr className="top-divider" />
             </Col>
-            <Col xs="12" sm="3">
+            <Col xs="12" md="3">
               {isTraining ? (
                 <div className="pt-2">
                   <i className="text-primary fa fa-spinner fa-spin fa-fw fa-2x pull-right" />
