@@ -12,7 +12,7 @@ import SelectedPrimesTestCard from '../components/selected_primestest_card';
 export default class DocsPage extends React.Component {
   constructor() {
     super();
-    this.groupTags = ['cloud', 'server', 'gateway', 'laptop', 'edge'];
+    this.groupTags = ['cloud', 'office', 'gateway', 'laptop', 'edge'];
     this.state = {
       clients: [],
       routerClients: [],
@@ -128,7 +128,7 @@ export default class DocsPage extends React.Component {
                   <hr className="mt-0 mb-2" />
                 </Col>
                 {tagClients.length ? tagClients.map(c => (
-                  <ClientCard key={c.MAC} client={c} selectClient={this.selectClient} isSelected={selectedClient === c.MAC} />
+                  <ClientCard key={c.MAC} client={c} selectClient={this.selectClient} />
                 )) : (
                   <Col xs="12" className="text-center p-1 text-muted"><small>no nodes currently registered</small></Col>
                 )}

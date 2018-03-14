@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Card, CardBody } from '@nio/ui-kit';
 
-const ClientCard = ({ client, selectClient, isSelected }) => (
+const ClientCard = ({ client, selectClient }) => (
   <Col
     onClick={() => selectClient(client.MAC)}
     xs="12"
