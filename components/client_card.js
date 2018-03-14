@@ -5,10 +5,9 @@ const ClientCard = ({ client, selectClient, isSelected }) => (
   <Col
     onClick={() => selectClient(client.MAC)}
     xs="12"
-    sm="6"
-    md="4"
-    lg="3"
-    xl="2"
+    md="6"
+    lg="4"
+    xl="3"
     className={`mb-3 client-card ${client.tag[1].toLowerCase()} ${client.os.toLowerCase()} ${client.nonResponsive && 'non-responsive'} ${(client.violations.cpu || client.violations.up || client.violations.ram || client.violations.down) && 'stressed'}`}
   >
     <Card>
@@ -20,6 +19,7 @@ const ClientCard = ({ client, selectClient, isSelected }) => (
         </div>
         <div className="content-pane">
           <div className="client-name">
+            <h6>{client.tag[1].toLowerCase()} / {client.os.toLowerCase() === 'darwin' ? 'macos' : client.os.toLowerCase()}</h6>
             {client.name}<br />
             {client.project && (<a href={`http://${client.project}`} target="_blank">{client.project}</a>)}
           </div>

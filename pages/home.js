@@ -50,7 +50,6 @@ export default class DocsPage extends React.Component {
     const { clients } = this.state;
     const json = new TextDecoder().decode(data);
     const clientData = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
-    console.log(clientData);
     const { violations, name, tag, MAC, os, project } = clientData;
     const clientIndexInClientArray = clients.findIndex(c => c.MAC === MAC);
     if (clientIndexInClientArray !== -1) {
@@ -108,7 +107,7 @@ export default class DocsPage extends React.Component {
     const allClients = clients.concat(routerClients);
 
     return (
-      <div>
+      <div id="app-content">
         <Card id="adminHeader">
           <CardBody className="p-3">
             {this.pkClient && <AdminHeader pkClient={this.pkClient} forceClientUpdate={this.forceClientUpdate} isTraining={isTraining} startPrimesTest={this.startPrimesTest} />}
