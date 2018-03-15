@@ -219,6 +219,27 @@
       }
     }
   }
+
+  #loadtest {
+    .dropdown-toggle {
+      border-color: $brand-primary !important;
+      background-color: $brand-primary !important;
+      color: $white !important;
+      min-width: 155px !important;
+      text-align: center;
+      padding-right: 14px !important;
+
+      &::after {
+        display: none !important;
+      }
+    }
+    .dropdown-menu {
+      .dropdown-item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
 }
 
 #selectedCardHolder {

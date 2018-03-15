@@ -28,9 +28,9 @@ export default class AdminHeader extends React.Component {
       available_disk: 0,
     };
     this.loadTestOptions = [
-      { label: 'Calculate 10,000 Primes', value: 10000 },
-      { label: 'Calculate 100,000 Primes', value: 100000 },
-      { label: 'Calculate 500,000 Primes', value: 500000 },
+      { label: 'generate 10,000 primes', value: 10000 },
+      { label: 'generate 100,000 primes', value: 100000 },
+      { label: 'generate 500,000 primes', value: 500000 },
     ];
 
     const fns = ['sendBrew', 'handleSystemStatsData'];
@@ -92,6 +92,7 @@ export default class AdminHeader extends React.Component {
                 </div>
               ) : (
                 <SelectDropdown
+                  id="loadtest"
                   onChange={qty => qty && startPrimesTest(qty)}
                   options={this.loadTestOptions}
                   placeholder="distribute load test"

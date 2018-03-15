@@ -12,7 +12,7 @@ import SelectedPrimesTestCard from '../components/selected_primestest_card';
 export default class DocsPage extends React.Component {
   constructor() {
     super();
-    this.groupTags = ['cloud', 'office', 'network', 'laptop', 'edge'];
+    this.groupTags = ['cloud', 'office', 'network', 'laptop', 'edge', 'edge-lite'];
     this.state = {
       clients: [],
       routerClients: [],
@@ -51,6 +51,8 @@ export default class DocsPage extends React.Component {
     const json = new TextDecoder().decode(data);
     const clientData = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
     const { violations, name, tag, MAC, os, project } = clientData;
+
+
     const clientIndexInClientArray = clients.findIndex(c => c.MAC === MAC);
     if (clientIndexInClientArray !== -1) {
       clients[clientIndexInClientArray] = { violations, name, tag, MAC, os, project };

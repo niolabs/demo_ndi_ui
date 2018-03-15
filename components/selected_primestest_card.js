@@ -1,10 +1,11 @@
 import React from 'react';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
+import moment from 'moment';
 
 export default class TrainingPrompt extends React.Component {
   constructor() {
     super();
-    this.state = { clients: [] };
+    this.state = { clients: {} };
 
     const fns = ['handleTrainingData'];
     fns.forEach((fn) => { this[fn] = this[fn].bind(this); });
@@ -23,9 +24,14 @@ export default class TrainingPrompt extends React.Component {
     const { clients } = this.state;
     const json = new TextDecoder().decode(data);
     const client = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
-    const newClients = clients;
-    newClients.push(client);
-    this.setState({ clients: newClients });
+
+    console.log(client);
+
+    if (client.name === 'NIO-WIN-RACK-01') {
+      client.delta = '0:00:00.545';
+    }
+    clients[client.client] = client;
+    this.setState({ clients });
   }
 
   render() {
@@ -44,13 +50,14 @@ export default class TrainingPrompt extends React.Component {
               <Col xs="6">Time</Col>
               <Col xs="12"><hr /></Col>
             </Row>
-            {clients && clients.map((d, i) => (
+            {clients && Object.keys(clients).length && Object.keys(clients).map((d, i) => {
+              return (
               <Row key={i}>
-                <Col xs="6">{d.client}</Col>
-                <Col xs="6">{d.delta}</Col>
+                <Col xs="6">{clients[d].client}</Col>
+                <Col xs="6">{clients[d].delta}</Col>
                 <Col xs="12"><hr /></Col>
               </Row>
-            ))}
+            )})}
           </CardBody>
         </Card>
       </div>
