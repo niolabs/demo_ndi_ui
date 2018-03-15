@@ -1,0 +1,90 @@
+#adminHeader {
+  min-height: 146px;
+  border: 1px solid transparent;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
+  .page-title {
+    margin: 0;
+    font-size: 7.5vw;
+    @media only screen and (min-width: 430px) {
+      font-size: 2rem !important;
+      white-space: nowrap;
+    }
+    @media only screen and (max-width: 320px) {
+      font-size: 1.5rem !important;
+    }
+  }
+  .top-divider {
+    @media only screen and (min-width: 768px) {
+      display: none;
+    }
+  }
+
+  .fa {
+    color: $gray;
+  }
+
+  .rangeslider-horizontal {
+    height: 12px;
+    margin-top: 4px;
+    .rangeslider__handle {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  .border-right {
+    @media only screen and (min-width: 576px) {
+      border-right: 1px solid $gray-lightest;
+    }
+  }
+
+  .summary {
+    border-right: 1px solid $gray-lightest;
+    @media only screen and (max-width: 991px) {
+      border-right: none;
+    }
+    .summary-label {
+      font-size: 12px;
+      line-height: 0.7;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      text-align: center;
+      @media only screen and (max-width: 575px) {
+        margin-bottom: 10px;
+      }
+      h4 {
+        font-size: 3.00vw;
+        color: $gray;
+        @media only screen and (min-width: 677px) {
+          font-size: 1.5rem !important;
+        }
+        @media only screen and (max-width: 575px) {
+          font-size: 1.1rem !important;
+        }
+      }
+    }
+  }
+
+  #loadtest {
+    .dropdown-toggle {
+      border-color: $brand-primary !important;
+      background-color: $brand-primary !important;
+      color: $white !important;
+      min-width: 155px !important;
+      text-align: center;
+      padding-right: 14px !important;
+
+      &::after {
+        display: none !important;
+      }
+    }
+    .dropdown-menu {
+      .dropdown-item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}

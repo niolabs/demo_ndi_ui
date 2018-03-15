@@ -4,7 +4,7 @@ import { Col, Card, CardBody } from '@nio/ui-kit';
 
 const ClientCard = ({ client, selectClient }) => (
   <Col
-    onClick={() => selectClient(client.MAC)}
+    onClick={() => selectClient(client)}
     xs="12"
     md="6"
     lg="4"

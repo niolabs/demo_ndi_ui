@@ -86,9 +86,9 @@ export default class DocsPage extends React.Component {
     this.setState({ selectedClient: false, isTraining: false });
   }
 
-  selectClient(MAC) {
+  selectClient(client) {
     this.closeModal();
-    setTimeout(() => { this.setState({ selectedClient: MAC }); }, 250);
+    setTimeout(() => { this.setState({ selectedClient: client }); }, 250);
   }
 
   startPrimesTest(value) {
@@ -97,11 +97,11 @@ export default class DocsPage extends React.Component {
     setTimeout(() => { this.setState({ isTraining: true }); }, 250);
   }
 
-  updateClientResponseState(state, selectedClient) {
+  updateClientResponseState(state, selectedClientMAC) {
     const { clients } = this.state;
-    clients[clients.findIndex(c => c.MAC === selectedClient)].nonResponsive = state;
+    clients[clients.findIndex(c => c.MAC === selectedClientMAC)].nonResponsive = state;
     this.setState({ clients });
-    if (selectedClient === this.state.selectedClient && state) this.selectClient();
+    if (selectedClientMAC === this.state.selectedClient.MAC && state) this.selectClient();
   }
 
   render() {
@@ -109,7 +109,7 @@ export default class DocsPage extends React.Component {
     const allClients = clients.concat(routerClients);
 
     return (
-      <div id="app-content">
+      <div>
         <Card id="adminHeader">
           <CardBody className="p-3">
             {this.pkClient && <AdminHeader pkClient={this.pkClient} forceClientUpdate={this.forceClientUpdate} isTraining={isTraining} startPrimesTest={this.startPrimesTest} />}
@@ -139,8 +139,8 @@ export default class DocsPage extends React.Component {
           })}
         </div>
         <div id="selectedCardHolder" className={(selectedClient || isTraining) ? 'd-block' : 'd-none'} onClick={() => this.closeModal()}>
-          { selectedClient && selectedClient.includes('meraki') ? (
-            <SelectedRouterCard client={routerClients.find(r => r.name === selectedClient)} />
+          { selectedClient && selectedClient.name.includes('meraki') ? (
+            <SelectedRouterCard client={routerClients.find(r => r.name === selectedClient.name)} />
           ) : selectedClient && this.pkClient ? (
             <SelectedClientCard pkClient={this.pkClient} selectedClient={selectedClient} updateClientResponseState={this.updateClientResponseState} />
           ) : isTraining && this.pkClient ? (

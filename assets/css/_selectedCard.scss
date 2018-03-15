@@ -1,0 +1,54 @@
+#selectedCardHolder {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  padding: 15px;
+  width: 90%;
+  max-width: 500px;
+  min-width: 288px;
+  border-radius: .25rem;
+  border: 1px solid $brand-primary;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 1040;
+
+  .modal-content {
+    border: none;
+  }
+
+  #selectedCard {
+    border: 1px solid $brand-primary;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 80px;
+    box-shadow: none !important;
+
+    .content-holder {
+      height: 450px;
+      overflow: hidden;
+      overflow-y: auto;
+
+      @media only screen and (max-height: 595px) {
+        height: calc(100vh - 145px);
+      }
+    }
+
+    .icon-holder {
+      background-color: $brand-primary !important;
+      height: 30px;
+      width: 30px;
+      min-width: 30px;
+      border-radius: 6px;
+
+      &.full-width {
+        width: 100%;
+      }
+    }
+
+    .name-holder {
+      line-height: 1;
+    }
+  }
+}
