@@ -1,11 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Col, Row, RangeSlider, SelectDropdown } from '@nio/ui-kit';
 
-export default class AdminHeader extends React.Component {
+class AdminHeader extends React.Component {
   constructor() {
     super();
     this.state = {
-      first_run: true,
       cpu_limit: 0,
       cpu_max: 100,
       cpu_changing: false,
@@ -205,3 +205,12 @@ export default class AdminHeader extends React.Component {
     );
   }
 }
+
+AdminHeader.propTypes = {
+  isTraining: PropTypes.bool,
+  startPrimesTest: PropTypes.func.isRequired,
+  forceClientUpdate: PropTypes.func.isRequired,
+  pkClient: PropTypes.object.isRequired,
+};
+
+export default AdminHeader;

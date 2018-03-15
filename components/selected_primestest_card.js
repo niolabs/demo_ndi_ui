@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
-import moment from 'moment';
 
-export default class TrainingPrompt extends React.Component {
+class TrainingPrompt extends React.Component {
   constructor() {
     super();
     this.state = { clients: {} };
@@ -22,12 +22,17 @@ export default class TrainingPrompt extends React.Component {
 
   handleTrainingData(data) {
     const { clients } = this.state;
+    const { allClients } = this.props;
+
     const json = new TextDecoder().decode(data);
     const client = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
+    const thisClientIndex = Object.keys(allClients).find((c, i) => allClients[i].name === client.client);
 
-    console.log(client);
-
-    if (client.name === 'NIO-WIN-RACK-01') {
+    if (thisClientIndex) {
+      client.os = allClients[thisClientIndex].os.toLowerCase();
+      client.meta = allClients[thisClientIndex].tag.join(' | ').toLowerCase();
+    }
+    if (client.client === 'NIO-WIN-RACK-01') {
       client.delta = '0:00:00.545';
     }
     clients[client.client] = client;
@@ -45,22 +50,33 @@ export default class TrainingPrompt extends React.Component {
         </h6>
         <Card id="selectedCard">
           <CardBody className="content-holder">
-            <Row>
-              <Col xs="6">Client Name</Col>
-              <Col xs="6">Time</Col>
-              <Col xs="12"><hr /></Col>
-            </Row>
-            {clients && Object.keys(clients).length && Object.keys(clients).map((d, i) => {
-              return (
-              <Row key={i}>
-                <Col xs="6">{clients[d].client}</Col>
-                <Col xs="6">{clients[d].delta}</Col>
+            {Object.keys(clients).sort((a, b) => clients[a].delta.replace(/\D/g, '') - clients[b].delta.replace(/\D/g, '')).map(d => (
+              <Row key={clients[d].client}>
+                <Col xs="2" className="d-none d-sm-block">
+                  <div className={`icon-holder ${clients[d].os}`}>
+                    <div className="os-icon" />
+                  </div>
+                </Col>
+                <Col xs="12" sm="6">
+                  <div className="name-holder">
+                    <b>{clients[d].client}</b><br />
+                    <i>{clients[d].meta}</i>
+                  </div>
+                </Col>
+                <Col xs="12" sm="4" className="pt-1 text-xs-center text-sm-right">{clients[d].delta}</Col>
                 <Col xs="12"><hr /></Col>
               </Row>
-            )})}
+            ))}
           </CardBody>
         </Card>
       </div>
     );
   }
 }
+
+TrainingPrompt.propTypes = {
+  pkClient: PropTypes.object.isRequired,
+  allClients: PropTypes.array.isRequired,
+};
+
+export default TrainingPrompt;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Col, Card, CardBody } from '@nio/ui-kit';
 
 const ClientCard = ({ client, selectClient }) => (
@@ -12,7 +13,7 @@ const ClientCard = ({ client, selectClient }) => (
   >
     <Card>
       <CardBody className="content-holder">
-        <div className="left-pane">
+        <div className="icon-holder">
           <div className="brand-icon" />
           <div className="divider" />
           <div className="os-icon" />
@@ -38,5 +39,10 @@ const ClientCard = ({ client, selectClient }) => (
     </Card>
   </Col>
 );
+
+ClientCard.propTypes = {
+  client: PropTypes.object.isRequired,
+  selectClient: PropTypes.func.isRequired,
+};
 
 export default ClientCard;

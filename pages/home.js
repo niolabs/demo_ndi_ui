@@ -57,7 +57,7 @@ export default class DocsPage extends React.Component {
     if (clientIndexInClientArray !== -1) {
       clients[clientIndexInClientArray] = { violations, name, tag, MAC, os, project };
     } else {
-      clients.push({ violations, name, tag, MAC, os, project })
+      clients.push({ violations, name, tag, MAC, os, project });
     }
     this.setState({ clients });
   }
@@ -99,7 +99,7 @@ export default class DocsPage extends React.Component {
 
   updateClientResponseState(state, selectedClient) {
     const { clients } = this.state;
-    clients[clients.findIndex(c => c.MAC === selectedClient )].nonResponsive = state;
+    clients[clients.findIndex(c => c.MAC === selectedClient)].nonResponsive = state;
     this.setState({ clients });
     if (selectedClient === this.state.selectedClient && state) this.selectClient();
   }
@@ -144,7 +144,7 @@ export default class DocsPage extends React.Component {
           ) : selectedClient && this.pkClient ? (
             <SelectedClientCard pkClient={this.pkClient} selectedClient={selectedClient} updateClientResponseState={this.updateClientResponseState} />
           ) : isTraining && this.pkClient ? (
-            <SelectedPrimesTestCard pkClient={this.pkClient} />
+            <SelectedPrimesTestCard allClients={clients} pkClient={this.pkClient} />
           ) : null}
         </div>
       </div>

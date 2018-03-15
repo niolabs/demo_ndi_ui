@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardBody, Loader } from '@nio/ui-kit';
 
-export default class SelectedClientCard extends React.Component {
+class SelectedClientCard extends React.Component {
   constructor() {
     super();
-    this.state = { client: false, isOpen: false };
+    this.state = { client: false };
     const fns = ['initializeSelectedClientData', 'handleSelectedClientData'];
     fns.forEach((fn) => { this[fn] = this[fn].bind(this); });
   }
@@ -86,3 +87,11 @@ export default class SelectedClientCard extends React.Component {
     );
   }
 }
+
+SelectedClientCard.propTypes = {
+  pkClient: PropTypes.object.isRequired,
+  updateClientResponseState: PropTypes.func.isRequired,
+  selectedClient: PropTypes.string.isRequired,
+};
+
+export default SelectedClientCard;
