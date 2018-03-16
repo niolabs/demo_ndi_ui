@@ -103,7 +103,7 @@ class AdminHeader extends React.Component {
           <hr />
           <Row>
             <Col xs="6" sm="3" className="summary-label border-right">
-              <h4 className="m-0">{stressed_clients}/{total_clients}</h4>stressed clients
+              <h4 className="m-0">{stressed_clients}/{total_clients}</h4>stressed devices
             </Col>
             <Col xs="6" sm="3" className="summary-label border-right">
               <h4 className="m-0">{Math.round(available_cpu)}/{Math.round(total_cpu)}</h4>available vCPU

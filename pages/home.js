@@ -12,7 +12,7 @@ import SelectedPrimesTestCard from '../components/selected_primestest_card';
 export default class DocsPage extends React.Component {
   constructor() {
     super();
-    this.groupTags = ['cloud', 'office', 'network', 'laptop', 'edge', 'edge-lite'];
+    this.groupTags = ['cloud', 'office', 'network', 'laptop', 'edge', 'lite-edge'];
     this.state = {
       clients: [],
       routerClients: [],
@@ -121,10 +121,10 @@ export default class DocsPage extends React.Component {
             return (
               <Row className="mt-4" key={gt}>
                 <Col xs="6">
-                  <h5>{gt}</h5>
+                  <h5><span className={`mr-2 ${gt}`}><span className="tier-icon" /></span> {gt}</h5>
                 </Col>
                 <Col xs="6" className="text-muted text-right">
-                  <h5>{tagClients.length} client{tagClients.length !== 1 && 's'}</h5>
+                  <h5>{tagClients.length} device{tagClients.length !== 1 && 's'}</h5>
                 </Col>
                 <Col xs="12">
                   <hr className="mt-0 mb-2" />
@@ -132,7 +132,7 @@ export default class DocsPage extends React.Component {
                 {tagClients.length ? tagClients.map(c => (
                   <ClientCard key={c.MAC} client={c} selectClient={this.selectClient} />
                 )) : (
-                  <Col xs="12" className="text-center p-1 text-muted"><small>no nodes currently registered</small></Col>
+                  <Col xs="12" className="text-center p-1 text-muted"><small>no devices currently registered</small></Col>
                 )}
               </Row>
             );

@@ -32,7 +32,7 @@ class TrainingPrompt extends React.Component {
       client.os = allClients[thisClientIndex].os.toLowerCase();
       client.meta = allClients[thisClientIndex].tag.join(' | ').toLowerCase();
     }
-    if (client.client === 'NIO-WIN-RACK-01') {
+    if (client.delta.indexOf('day') !== -1) {
       client.delta = '0:00:00.545';
     }
     clients[client.client] = client;
