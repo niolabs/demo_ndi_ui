@@ -12,7 +12,7 @@ export default {
     },
   },
   auth0: {
-    loginRequired: true,
+    loginRequired: false,
     webAuth: {
       domain: 'nio.auth0.com',
       clientID: 'quLReF2fOEnrBFtLA5yuh0pnuRUEuCVd',
