@@ -19,7 +19,6 @@ export default class DocsPage extends React.Component {
       selectedClient: false,
       isTraining: false,
     };
-
     const fns = ['selectClient', 'handleClientStateData', 'updateClientResponseState', 'handleRouterStateData', 'forceClientUpdate', 'startPrimesTest', 'closeModal'];
     fns.forEach((fn) => { this[fn] = this[fn].bind(this); });
   }
