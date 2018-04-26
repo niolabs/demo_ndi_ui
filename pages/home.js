@@ -35,6 +35,7 @@ export default class DocsPage extends React.Component {
         });
       })
       .catch(() => console.log('unable to locate pubkeeper config details.')); // eslint-disable-line no-console
+    window.addEventListener('message', event => event.source.postMessage('logged in', event.origin), false);
   }
 
   componentWillUnmount() {
