@@ -35,7 +35,6 @@ export default class DocsPage extends React.Component {
         });
       })
       .catch(() => console.log('unable to locate pubkeeper config details.')); // eslint-disable-line no-console
-    window.addEventListener('message', event => event.source.postMessage('logged in', event.origin), false);
   }
 
   componentWillUnmount() {
@@ -139,7 +138,7 @@ export default class DocsPage extends React.Component {
           })}
         </div>
         <div id="selectedCardHolder" className={(selectedClient || isTraining) ? 'd-block' : 'd-none'} onClick={() => this.closeModal()}>
-          { selectedClient && selectedClient.name.includes('meraki') ? (
+          { selectedClient && selectedClient.os === 'meraki' ? (
             <SelectedRouterCard client={routerClients.find(r => r.name === selectedClient.name)} />
           ) : selectedClient && this.pkClient ? (
             <SelectedClientCard pkClient={this.pkClient} selectedClient={selectedClient} updateClientResponseState={this.updateClientResponseState} />
