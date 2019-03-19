@@ -38,7 +38,9 @@ class AdminHeader extends React.Component {
     const { pkClient } = this.props;
 
     if (pkClient) {
-      pkClient.addBrewer('dni.admin_limits', (brewer) => { this.brewer = brewer; });
+      pkClient.addBrewer('dni.admin_limits', (brewer) => {
+        this.brewer = brewer;
+      });
       pkClient.addPatron('dni.system_stats', (patron) => {
         patron.on('message', this.handleSystemStatsData);
         return () => { patron.off('message', this.handleSystemStatsData); };
