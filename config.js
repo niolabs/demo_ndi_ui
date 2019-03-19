@@ -1,26 +1,9 @@
 export default {
-  pubkeeper: {
-    staticPubkeeper: true,
-    pkConfig: {
-      PK_HOST: 'pks.demo.niolabs.com',
-      PK_PORT: 443,
-      PK_SECURE: true,
-      PK_JWT: '7BB1F97195DE7CA6D0CF0D3AE821BB6916C7CD0053E8E4610EECD34AEEFDB4F0',
-      WS_HOST: 'wss.demo.niolabs.com',
-      WS_PORT: 443,
-      WS_SECURE: true,
-    },
-  },
-  auth0: {
-    loginRequired: true,
-    webAuth: {
-      domain: 'nio.auth0.com',
-      clientID: 'quLReF2fOEnrBFtLA5yuh0pnuRUEuCVd',
-      audience: 'https://api.n.io/v1',
-      responseType: 'token',
-      redirectUri: `${window.location.origin}?authorize=true`,
-      leeway: 60,
-      __disableExpirationCheck: true,
-    },
-  },
+  PK_HOST: 'fc797ed2-4e92-47b9-b167-3276c0c62e63.pubkeeper.nio.works',
+  PK_PORT: 443,
+  PK_SECURE: true,
+  PK_JWT: 'a53b7d92a13eeb6d6a98bbe6265673c163ed2923a41340dadae76b4095e60c8d',
+  WS_HOST: 'fc797ed2-4e92-47b9-b167-3276c0c62e63.websocket.nio.works',
+  WS_PORT: 443,
+  WS_SECURE: true,
 };

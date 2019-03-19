@@ -1,51 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardBody, Row, Col, Loader } from '@nio/ui-kit';
+import { withPubkeeper } from '../providers/pubkeeper';
 
 class SelectedClientCard extends React.Component {
-  constructor() {
-    super();
-    this.state = { client: false };
-    const fns = ['initializeSelectedClientData', 'handleSelectedClientData'];
-    fns.forEach((fn) => { this[fn] = this[fn].bind(this); });
-  }
+  state = { client: false };
 
-  componentDidMount() {
-    this.initializeSelectedClientData(this.props.selectedClient);
-  }
+  componentDidMount = () => {
+    const { selectedClient } = this.props;
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { pkClient } = this.props;
+    this.initializeSelectedClientData(selectedClient);
+  };
 
-    if (this.props.selectedClient.MAC !== nextProps.selectedClient.MAC) {
+  shouldComponentUpdate = (nextProps, nextState) => {
+    const { pkClient, selectedClient, client } = this.props;
+
+    if (selectedClient.MAC !== nextProps.selectedClient.MAC) {
       if (this.patronTimeout) clearTimeout(this.patronTimeout);
       if (this.patron) pkClient.removePatron(this.patron);
       this.setState({ client: false });
       this.initializeSelectedClientData(nextProps.selectedClient);
       return true;
     }
-    return (this.state.client !== nextState.client);
-  }
+    return (client !== nextState.client);
+  };
 
-  initializeSelectedClientData(selectedClient) {
+  initializeSelectedClientData = (selectedClient) => {
     const { pkClient, updateClientResponseState } = this.props;
 
     this.patronTimeout = setTimeout(() => { updateClientResponseState(true, selectedClient); }, 3000);
-    pkClient.addPatron(`dni.client_stats.${selectedClient.MAC}`, { autoRemoveListeners: true }, (patron) => {
+    pkClient.addPatron(`dni.client_stats.${selectedClient.MAC}`, (patron) => {
       clearTimeout(this.patronTimeout);
       updateClientResponseState(false, selectedClient.MAC);
       patron.on('message', this.handleSelectedClientData);
       return () => { patron.off('message', this.handleSelectedClientData); };
     });
-  }
+  };
 
-  handleSelectedClientData(data) {
+  handleSelectedClientData = (data) => {
     const json = new TextDecoder().decode(data);
     const client = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
     this.setState({ client });
-  }
+  };
 
-  render() {
+  render = () => {
     const { client } = this.state;
     const { selectedClient } = this.props;
 
@@ -53,7 +51,7 @@ class SelectedClientCard extends React.Component {
       <div>
         <h6 className="mb-3">
           {client.name || <i className="fa fa-spinner fa-spin fa-fw" />}
-          {client.project && (<a href={`http://${client.project}`} className="ml-3" target="_blank">{client.project}</a>)}
+          {client.project && (<a href={`http://${client.project}`} className="ml-3" rel="noopener noreferrer" target="_blank">{client.project}</a>)}
           <i className="fa fa-times pull-right" />
         </h6>
         <Card id="selectedCard">
@@ -119,4 +117,4 @@ SelectedClientCard.propTypes = {
   selectedClient: PropTypes.object.isRequired,
 };
 
-export default SelectedClientCard;
+export default withPubkeeper(SelectedClientCard);

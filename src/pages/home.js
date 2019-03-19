@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Col, Row, Card, CardBody } from '@nio/ui-kit';
 
-import { createPubkeeperClient } from '../util/pubkeeper';
+import { withPubkeeper } from '../providers/pubkeeper';
 
 import AdminHeader from '../components/admin_header';
 import ClientCard from '../components/client_card';
@@ -9,48 +10,46 @@ import SelectedClientCard from '../components/selected_client_card';
 import SelectedRouterCard from '../components/selected_router_card';
 import SelectedPrimesTestCard from '../components/selected_primestest_card';
 
-export default class DocsPage extends React.Component {
-  constructor() {
-    super();
-    this.groupTags = ['cloud', 'office', 'network', 'laptop', 'edge', 'lite-edge'];
-    this.state = {
-      clients: [],
-      routerClients: [],
-      selectedClient: false,
-      isTraining: false,
-    };
-    const fns = ['selectClient', 'handleClientStateData', 'updateClientResponseState', 'handleRouterStateData', 'forceClientUpdate', 'startPrimesTest', 'closeModal'];
-    fns.forEach((fn) => { this[fn] = this[fn].bind(this); });
-  }
+class Page extends React.Component {
+  groupTags = ['cloud', 'office', 'network', 'laptop', 'edge', 'lite-edge'];
 
-  componentDidMount() {
-    createPubkeeperClient()
-      .then((pkClient) => {
-        this.pkClient = pkClient;
-        pkClient.connect().then(() => {
-          pkClient.addPatron('dni.client_state.*', patron => patron.on('message', this.handleClientStateData));
-          pkClient.addPatron('dni.router_state', patron => patron.on('message', this.handleRouterStateData));
-          pkClient.addBrewer('dni.newui', (brewer) => { this.brewer = brewer; setTimeout(() => { this.forceClientUpdate(); }, 1000); });
-          pkClient.addBrewer('dni.primes.start', (brewer) => { this.primesbrewer = brewer; });
-        });
-      })
-      .catch(() => console.log('unable to locate pubkeeper config details.')); // eslint-disable-line no-console
-  }
+  state = {
+    clients: [],
+    routerClients: [],
+    selectedClient: false,
+    isTraining: false,
+  };
 
-  componentWillUnmount() {
-    if (this.pkClient) this.pkClient.disconnect();
-  }
+  componentDidMount = () => {
+    const { pkClient } = this.props;
 
-  forceClientUpdate() {
-    this.brewer.brewJSON([{ go: true }]);
-  }
+    if (pkClient) {
+      pkClient.addPatron('dni.client_state.*', (patron) => {
+        patron.on('message', this.handleClientStateData);
+        return () => { patron.off('message', this.handleClientStateData); };
+      });
+      pkClient.addPatron('dni.router_state', (patron) => {
+        patron.on('message', this.handleRouterStateData);
+        return () => { patron.off('message', this.handleRouterStateData); };
+      });
+      pkClient.addBrewer('dni.newui', (brewer) => {
+        this.brewer = brewer;
+        setTimeout(() => { this.forceClientUpdate(); }, 1000);
+      });
+      pkClient.addBrewer('dni.primes.start', (brewer) => {
+        this.primesbrewer = brewer;
+      });
+    } else {
+      alert('no pkClient');
+    }
+  };
 
-  handleClientStateData(data) {
+  handleClientStateData = (data) => {
     const { clients } = this.state;
+
     const json = new TextDecoder().decode(data);
     const clientData = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
     const { violations, name, tag, MAC, os, project } = clientData;
-
 
     const clientIndexInClientArray = clients.findIndex(c => c.MAC === MAC);
     if (clientIndexInClientArray !== -1) {
@@ -59,9 +58,9 @@ export default class DocsPage extends React.Component {
       clients.push({ violations, name, tag, MAC, os, project });
     }
     this.setState({ clients });
-  }
+  };
 
-  handleRouterStateData(data) {
+  handleRouterStateData = (data) => {
     const json = new TextDecoder().decode(data);
     const newVars = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
     const routerClients = newVars.network;
@@ -79,31 +78,35 @@ export default class DocsPage extends React.Component {
       delete thisClient.ap_name;
     }
     this.setState({ routerClients });
-  }
+  };
 
-  closeModal() {
+  forceClientUpdate = () => {
+    this.brewer.brewJSON([{ go: true }]);
+  };
+
+  closeModal = () => {
     this.setState({ selectedClient: false, isTraining: false });
-  }
+  };
 
-  selectClient(client) {
+  selectClient = (client) => {
     this.closeModal();
     setTimeout(() => { this.setState({ selectedClient: client }); }, 250);
-  }
+  };
 
-  startPrimesTest(value) {
+  startPrimesTest = (value) => {
     this.closeModal();
     this.primesbrewer.brewJSON([{ state: true, length: value, number: 2, time: new Date().toISOString() }]);
     setTimeout(() => { this.setState({ isTraining: true }); }, 250);
-  }
+  };
 
-  updateClientResponseState(state, selectedClientMAC) {
-    const { clients } = this.state;
+  updateClientResponseState = (state, selectedClientMAC) => {
+    const { clients, selectedClient } = this.state;
     clients[clients.findIndex(c => c.MAC === selectedClientMAC)].nonResponsive = state;
     this.setState({ clients });
-    if (selectedClientMAC === this.state.selectedClient.MAC && state) this.selectClient();
-  }
+    if (selectedClientMAC === selectedClient.MAC && state) this.selectClient();
+  };
 
-  render() {
+  render = () => {
     const { clients, routerClients, selectedClient, isTraining } = this.state;
     const allClients = clients.concat(routerClients);
 
@@ -111,7 +114,7 @@ export default class DocsPage extends React.Component {
       <div>
         <Card id="adminHeader">
           <CardBody className="p-3">
-            {this.pkClient && <AdminHeader pkClient={this.pkClient} forceClientUpdate={this.forceClientUpdate} isTraining={isTraining} startPrimesTest={this.startPrimesTest} />}
+            <AdminHeader forceClientUpdate={this.forceClientUpdate} isTraining={isTraining} startPrimesTest={this.startPrimesTest} />
           </CardBody>
         </Card>
         <div id="clientCards">
@@ -120,7 +123,12 @@ export default class DocsPage extends React.Component {
             return (
               <Row className="mt-4" key={gt}>
                 <Col xs="6">
-                  <h5><span className={`mr-2 ${gt}`}><span className="tier-icon" /></span> {gt}</h5>
+                  <h5>
+                    <span className={`mr-2 ${gt}`}>
+                      <span className="tier-icon" />
+                    </span>
+                    {gt}
+                  </h5>
                 </Col>
                 <Col xs="6" className="text-muted text-right">
                   <h5>{tagClients.length} device{tagClients.length !== 1 && 's'}</h5>
@@ -140,13 +148,19 @@ export default class DocsPage extends React.Component {
         <div id="selectedCardHolder" className={(selectedClient || isTraining) ? 'd-block' : 'd-none'} onClick={() => this.closeModal()}>
           { selectedClient && selectedClient.os === 'meraki' ? (
             <SelectedRouterCard client={routerClients.find(r => r.name === selectedClient.name)} />
-          ) : selectedClient && this.pkClient ? (
-            <SelectedClientCard pkClient={this.pkClient} selectedClient={selectedClient} updateClientResponseState={this.updateClientResponseState} />
-          ) : isTraining && this.pkClient ? (
-            <SelectedPrimesTestCard allClients={clients} pkClient={this.pkClient} />
+          ) : selectedClient ? (
+            <SelectedClientCard selectedClient={selectedClient} updateClientResponseState={this.updateClientResponseState} />
+          ) : isTraining ? (
+            <SelectedPrimesTestCard allClients={clients} />
           ) : null}
         </div>
       </div>
     );
-  }
+  };
 }
+
+Page.propTypes = {
+  pkClient: PropTypes.object.isRequired,
+};
+
+export default withPubkeeper(Page);

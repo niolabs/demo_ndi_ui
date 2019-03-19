@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardBody, Col, Row } from '@nio/ui-kit';
 
+import { withPubkeeper } from '../providers/pubkeeper';
+
 class TrainingPrompt extends React.Component {
   constructor() {
     super();
@@ -79,4 +81,4 @@ TrainingPrompt.propTypes = {
   allClients: PropTypes.array.isRequired,
 };
 
-export default TrainingPrompt;
+export default withPubkeeper(TrainingPrompt);
