@@ -51,7 +51,9 @@ class SelectedClientCard extends React.Component {
       <div>
         <h6 className="mb-3">
           {client.name || <i className="fa fa-spinner fa-spin fa-fw" />}
+          {/*
           {client.project && (<a href={`http://${client.project}`} className="ml-3" rel="noopener noreferrer" target="_blank">{client.project}</a>)}
+          */}
           <i className="fa fa-times pull-right" />
         </h6>
         <Card id="selectedCard">
