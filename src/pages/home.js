@@ -11,7 +11,7 @@ import SelectedRouterCard from '../components/selected_router_card';
 import SelectedPrimesTestCard from '../components/selected_primestest_card';
 
 class Page extends React.Component {
-  groupTags = ['cloud', 'office', 'network', 'laptop', 'edge', 'lite-edge'];
+  groupTags = ['cloud', 'office', 'network', 'laptop', 'edge'];
 
   state = {
     clients: [],
